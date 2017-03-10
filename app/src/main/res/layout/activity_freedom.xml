@@ -1,46 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#ffffff"
     android:id="@+id/activity_freedom"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.a91256.freedomandroid.activity.FreedomActivity">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp">
 
-        <ImageView
-            android:id="@+id/headimg"
-            android:scaleType="fitXY"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <TextView
-            android:id="@+id/headTile"
-            android:background="#aa000000"
+    <RadioGroup
+        android:id="@+id/bottom_bar"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:button="@null"
+            android:layout_weight="1"
+            android:id="@+id/bookcase_text"
             android:gravity="center_horizontal"
-            android:textSize="20sp"
-            android:textColor="#ffffff"
-            android:layout_alignParentBottom="true"
-            android:lines="1"
-            android:singleLine="true"
+            android:textColor="@drawable/selector_tabcolor"
+            android:drawableTop="@drawable/selector_bookcase"
+            android:checked="true"
+            android:text="书架"
+            android:padding="2dp"
+            android:textSize="12sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-    <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/myRecycler"
+        <RadioButton
+            android:button="@null"
+            android:layout_weight="1"
+            android:id="@+id/featured_text"
+            android:gravity="center_horizontal"
+            android:textColor="@drawable/selector_tabcolor"
+            android:drawableTop="@drawable/selector_featured"
+            android:checked="false"
+            android:text="精选"
+            android:padding="2dp"
+            android:textSize="12sp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:button="@null"
+            android:layout_weight="1"
+            android:id="@+id/library_text"
+            android:gravity="center_horizontal"
+            android:textColor="@drawable/selector_tabcolor"
+            android:drawableTop="@drawable/selector_library"
+            android:checked="false"
+            android:text="书库"
+            android:padding="2dp"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:button="@null"
+            android:layout_weight="1"
+            android:id="@+id/find_text"
+            android:gravity="center_horizontal"
+            android:textColor="@drawable/selector_tabcolor"
+            android:drawableTop="@drawable/selector_find"
+            android:checked="false"
+            android:text="发现"
+            android:padding="2dp"
+            android:textSize="12sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        </android.support.v7.widget.RecyclerView>
+    </RadioGroup>
 
-
-    </com.baoyz.widget.PullRefreshLayout>
-
-</LinearLayout>
+</RelativeLayout>
