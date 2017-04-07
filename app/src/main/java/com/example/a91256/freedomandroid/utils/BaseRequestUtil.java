@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class BaseRequestUtil {
-    public static <T> T createApe(Class<T> clazz){
+    public static <T> T createApi(Class<T> clazz){
         return createApi(clazz,Urls.MAIN_URL);
     }
 

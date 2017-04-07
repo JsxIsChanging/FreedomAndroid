@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="match_parent">
+    <com.example.a91256.freedomandroid.Views.AutoChannelView
+        android:id="@+id/titles"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.example.a91256.freedomandroid.Views.AutoChannelView>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/content_list"
+        android:layout_below="@id/titles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+</RelativeLayout>

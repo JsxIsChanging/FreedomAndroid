@@ -1,10 +1,12 @@
 package com.example.a91256.freedomandroid.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by 91256 on 2017/3/15.
  */
 
-public class RankinglistBean {
+public class RankinglistBean implements Serializable{
     /**
      * title : 月票
      * subTitle : 来不及了快上车，老司机票选人气漫画，带你飞！

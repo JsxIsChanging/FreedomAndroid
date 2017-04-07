@@ -5,4 +5,20 @@ package com.example.a91256.freedomandroid.base;
  */
 
 public interface BaseView {
+    /***
+     *下载成功
+     */
+    void loadComplete(Object object);
+    /***
+     *下载失败
+     */
+    void loadFail();
+    /***
+     *显示下载UI
+     */
+    void showLoading();
+    /***
+     *隐藏下载UI
+     */
+    void stopLoading();
 }

@@ -5,8 +5,8 @@ package com.example.a91256.freedomandroid.base;
  */
 
 public class BasePresenter <M ,V >{
-    private M model;
-    private V view;
+    public M model;
+    public V view;
 
     public void attach(M model,V view){
         this.model = model;

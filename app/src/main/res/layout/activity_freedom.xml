@@ -9,12 +9,12 @@
     tools:context="com.example.a91256.freedomandroid.activity.FreedomActivity">
 
     <RadioGroup
-        android:id="@+id/bottom_bar"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <RadioButton
+    android:id="@+id/bottom_bar"
+    android:orientation="horizontal"
+    android:layout_alignParentBottom="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RadioButton
             android:button="@null"
             android:layout_weight="1"
             android:id="@+id/bookcase_text"
@@ -68,5 +68,14 @@
             android:layout_height="wrap_content" />
 
     </RadioGroup>
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_above="@id/bottom_bar"
+        android:layout_alignParentTop="true">
+
+    </FrameLayout>
 
 </RelativeLayout>

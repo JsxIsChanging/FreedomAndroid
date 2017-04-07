@@ -4,12 +4,20 @@ import com.example.a91256.freedomandroid.bean.ComicListBean;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Created by 91256 on 2017/3/15.
  */
 
-public interface RetrofitCall {
+public interface RetrofitApi {
     @GET("rank/list")
     Call<ComicListBean> getComicListCall();
+
+    @GET("list/commonComicList")
+    Call<ComicListBean> getRankDetilCall(
+            @Query("page")int page,
+            @Query("argName")String argName,
+            @Query("argValue")String value
+    );
 }
