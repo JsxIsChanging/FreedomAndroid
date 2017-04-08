@@ -27,6 +27,16 @@ import java.util.ArrayList;
  */
 
 public class ComicRankDetailFragment extends Fragment implements BaseView{
+    public static final String TYPE_UP = "up";
+    public static final String TYPE_DOWN = "down";
+
+    private int cuurrentPage = 1;
+    private boolean isloading = false;
+    private String argName;
+    private String argValue;
+    private String loadType;
+
+
     private RankinglistBean mRankBean;
     private RankDetailPresenter mPresenter;
     private RecyclerView mRecyclerView;
@@ -45,6 +55,8 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         this.mRankBean = (RankinglistBean)getArguments().get("data");
+        this.argName = mRankBean.getArgName();
+        this.argValue = mRankBean.getArgValue();
         mPresenter = new RankDetailPresenter(this);
         adapter = new MyAdapter();
         super.onCreate(savedInstanceState);
@@ -59,11 +71,13 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.loadData(1,mRankBean.getArgName(),mRankBean.getArgValue());
+                loadType = TYPE_DOWN;
+                mPresenter.loadData(1,argName,argValue);
             }
         });
         initList();
-        mPresenter.loadData(1,mRankBean.getArgName(),mRankBean.getArgValue());
+        loadType = TYPE_DOWN;
+        mPresenter.loadData(1,argName,argValue);
         return view;
     }
 
@@ -75,16 +89,43 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
         }
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int totalCount = recyclerView.getAdapter().getItemCount();
+                int visibleCount = recyclerView.getChildCount();
+                int firstPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+                if(!isloading && totalCount - firstPosition - visibleCount <= 2){
+                    cuurrentPage ++;
+                    loadType = TYPE_UP;
+                    mPresenter.loadData(cuurrentPage,argName,argValue);
+                    isloading = true;
+                }else if(isloading){
+                    isloading = false;
+                }
+            }
+        });
     }
 
     @Override
     public void loadComplete(Object object) {
         if(object instanceof ComicListBean){
-            ComicListBean bean = (ComicListBean)object;
-            listBean = bean.getData().getReturnData().getComics();
-            adapter.setData(listBean);
-            adapter.notifyDataSetChanged();
-            pullRefreshLayout.setRefreshing(false);
+            ComicListBean bean = (ComicListBean) object;
+            if(bean.getData()!=null && bean.getData().getReturnData()!=null) {
+                if (TYPE_DOWN.equals(loadType)) {
+                    listBean = bean.getData().getReturnData().getComics();
+                    adapter.setData(listBean);
+                    adapter.notifyDataSetChanged();
+                    pullRefreshLayout.setRefreshing(false);
+                } else if (TYPE_UP.equals(loadType)) {
+                    listBean.addAll(bean.getData().getReturnData().getComics());
+                    adapter.setData(listBean);
+                    adapter.notifyDataSetChanged();
+                }
+            }
         }
     }
 

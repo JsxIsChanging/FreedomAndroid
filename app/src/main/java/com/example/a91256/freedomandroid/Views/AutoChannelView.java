@@ -3,7 +3,6 @@ package com.example.a91256.freedomandroid.Views;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
