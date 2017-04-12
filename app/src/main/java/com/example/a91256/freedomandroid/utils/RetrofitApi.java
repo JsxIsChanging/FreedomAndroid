@@ -20,4 +20,8 @@ public interface RetrofitApi {
             @Query("argName")String argName,
             @Query("argValue")String value
     );
+    @GET("comic/detail_static_new")
+    Call<ComicListBean> getComicDetailCall(
+            @Query("comicid")String comicid
+    );
 }

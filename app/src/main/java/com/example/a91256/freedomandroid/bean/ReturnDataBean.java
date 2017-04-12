@@ -9,8 +9,11 @@ import java.util.ArrayList;
 public class ReturnDataBean {
     private ArrayList<RankinglistBean> rankinglist;
     private ArrayList<RankDetailBean> comics;
+    private ArrayList<ChapterBean> chapter_list;
+    private ArrayList<OtherWorkBean> otherWorks;
     private boolean hasMore;
     private int page;
+    private ComicDetailBean comic;
 
     public ArrayList<RankinglistBean> getRankinglist() {
         return rankinglist;
@@ -42,5 +45,29 @@ public class ReturnDataBean {
 
     public void setComics(ArrayList<RankDetailBean> comics) {
         this.comics = comics;
+    }
+
+    public ComicDetailBean getComic() {
+        return comic;
+    }
+
+    public void setComic(ComicDetailBean comic) {
+        this.comic = comic;
+    }
+
+    public ArrayList<ChapterBean> getChapter_list() {
+        return chapter_list;
+    }
+
+    public void setChapter_list(ArrayList<ChapterBean> chapter_list) {
+        this.chapter_list = chapter_list;
+    }
+
+    public ArrayList<OtherWorkBean> getOtherWorks() {
+        return otherWorks;
+    }
+
+    public void setOtherWorks(ArrayList<OtherWorkBean> otherWorks) {
+        this.otherWorks = otherWorks;
     }
 }
