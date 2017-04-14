@@ -9,16 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.a91256.freedomandroid.R;
+import com.example.a91256.freedomandroid.adapter.RankListAdapter;
 import com.example.a91256.freedomandroid.base.BaseView;
 import com.example.a91256.freedomandroid.bean.ComicListBean;
 import com.example.a91256.freedomandroid.bean.RankDetailBean;
 import com.example.a91256.freedomandroid.bean.RankinglistBean;
 import com.example.a91256.freedomandroid.presenter.RankDetailPresenter;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 
@@ -41,7 +40,7 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
     private RankDetailPresenter mPresenter;
     private RecyclerView mRecyclerView;
     private PullRefreshLayout pullRefreshLayout;
-    private MyAdapter adapter;
+    private RankListAdapter adapter;
     private ArrayList<RankDetailBean> listBean = new ArrayList<>();
 
 
@@ -58,7 +57,7 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
         this.argName = mRankBean.getArgName();
         this.argValue = mRankBean.getArgValue();
         mPresenter = new RankDetailPresenter(this);
-        adapter = new MyAdapter();
+        adapter = new RankListAdapter(getActivity());
         super.onCreate(savedInstanceState);
     }
 
@@ -144,49 +143,4 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
 
     }
 
-    public class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
-        private ArrayList<RankDetailBean> items = new ArrayList<>();
-
-        public void setData(ArrayList<RankDetailBean> list){
-            this.items = list;
-        }
-
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return new MyViewHolder(View.inflate(getContext(),R.layout.rank_detail_item,null));
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder myViewHolder, int i) {
-            myViewHolder.img.setImageURI(items.get(i).getCover());
-            myViewHolder.title.setText(items.get(i).getName());
-            ArrayList<String> tags = items.get(i).getTags();
-            String str = "";
-            for(int m = 0; m< tags.size()-1; m++){
-                str  = str + tags.get(m) + " | ";
-            }
-            str +=  tags.get(tags.size()-1);
-            myViewHolder.type.setText(str);
-            myViewHolder.des.setText("  " + items.get(i).getDescription());
-        }
-
-        @Override
-        public int getItemCount() {
-            return items.size();
-        }
-    }
-    public class MyViewHolder extends RecyclerView.ViewHolder{
-
-        public SimpleDraweeView img;
-        public TextView title;
-        public TextView type;
-        public TextView des;
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            img = (SimpleDraweeView)itemView.findViewById(R.id.detail_img);
-            type = (TextView)itemView.findViewById(R.id.detail_type);
-            des = (TextView)itemView.findViewById(R.id.detail_des);
-            title = (TextView)itemView.findViewById(R.id.detail_title);
-        }
-    }
 }
