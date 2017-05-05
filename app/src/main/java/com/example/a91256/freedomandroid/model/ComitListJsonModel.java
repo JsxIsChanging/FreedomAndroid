@@ -1,5 +1,7 @@
 package com.example.a91256.freedomandroid.model;
 
+import android.util.Log;
+
 import com.example.a91256.freedomandroid.base.BaseModel;
 import com.example.a91256.freedomandroid.bean.ComicListBean;
 import com.example.a91256.freedomandroid.callback.BaseJsonCallBack;
@@ -9,6 +11,8 @@ import com.example.a91256.freedomandroid.utils.RetrofitApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
+import rx.Observer;
 
 /**
  * Created by 91256 on 2017/3/21.
@@ -36,5 +40,24 @@ public class ComitListJsonModel implements BaseModel {
                 callBack.fail();
             }
         });
+        /*api.getComicListObservable().subscribe(new Observer<ComicListBean>() {
+            @Override
+            public void onCompleted() {
+                Log.e("jsx","onCompleted");
+                callBack.success(null);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                callBack.fail();
+                Log.e("jsx","OnError");
+            }
+
+            @Override
+            public void onNext(ComicListBean comicListBean) {
+                Log.e("jsx","OnNext");
+                callBack.success(comicListBean);
+            }
+        });*/
     }
 }

@@ -2,6 +2,7 @@ package com.example.a91256.freedomandroid.utils;
 
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -15,6 +16,7 @@ public class BaseRequestUtil {
 
     public static <T> T createApi(Class<T> clazz,String url){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(url)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         return retrofit.create(clazz);

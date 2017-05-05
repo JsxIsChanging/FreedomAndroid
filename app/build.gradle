@@ -39,5 +39,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0-beta4'
     testCompile 'junit:junit:4.12'
 }

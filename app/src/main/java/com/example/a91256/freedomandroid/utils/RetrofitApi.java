@@ -5,6 +5,7 @@ import com.example.a91256.freedomandroid.bean.ComicListBean;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by 91256 on 2017/3/15.
@@ -13,6 +14,9 @@ import retrofit2.http.Query;
 public interface RetrofitApi {
     @GET("rank/list")
     Call<ComicListBean> getComicListCall();
+
+    @GET("rank/list")
+    Observable<ComicListBean> getComicListObservable();
 
     @GET("list/commonComicList")
     Call<ComicListBean> getRankDetilCall(
