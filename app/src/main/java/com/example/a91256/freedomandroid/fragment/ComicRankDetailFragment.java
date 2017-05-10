@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 public class ComicRankDetailFragment extends Fragment implements BaseView{
     public static final String TYPE_UP = "up";
     public static final String TYPE_DOWN = "down";
+    private final String TAG = "ComicRankDetailFragment";
 
     private int cuurrentPage = 1;
     private boolean isloading = false;
@@ -111,6 +113,7 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
 
     @Override
     public void loadComplete(Object object) {
+        Log.e(TAG,"loadcomplete");
         if(object instanceof ComicListBean){
             ComicListBean bean = (ComicListBean) object;
             if(bean.getData()!=null && bean.getData().getReturnData()!=null) {
@@ -130,7 +133,7 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
 
     @Override
     public void loadFail() {
-
+        Log.e(TAG,"loadfail");
     }
 
     @Override

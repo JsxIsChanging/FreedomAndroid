@@ -1,5 +1,6 @@
 package com.example.a91256.freedomandroid.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import com.example.a91256.freedomandroid.R;
 import com.example.a91256.freedomandroid.activity.ComicDetailActivity;
 import com.example.a91256.freedomandroid.bean.RankDetailBean;
 import com.example.a91256.freedomandroid.holder.RankListHolder;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,8 +38,9 @@ public class RankListAdapter extends RecyclerView.Adapter<RankListHolder>{
     }
 
     @Override
-    public void onBindViewHolder(RankListHolder myViewHolder, final int i) {
-        myViewHolder.img.setImageURI(items.get(i).getCover());
+    public void onBindViewHolder(final RankListHolder myViewHolder, final int i) {
+//        myViewHolder.img.setImageURI(items.get(i).getCover());
+        Picasso.with(context).load(items.get(i).getCover()).into(myViewHolder.img);
         myViewHolder.title.setText(items.get(i).getName());
         ArrayList<String> tags = items.get(i).getTags();
         String str = "";
@@ -50,11 +53,13 @@ public class RankListAdapter extends RecyclerView.Adapter<RankListHolder>{
         myViewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String comicId =  String.valueOf(items.get(i).getComicId());
+                /*String comicId =  String.valueOf(items.get(i).getComicId());
                 Intent intent = new Intent();
                 intent.putExtra("comicId",comicId);
                 intent.setClass(context, ComicDetailActivity.class);
-                context.startActivity(intent);
+                context.startActivity(intent);*/
+
+                ComicDetailActivity.launch((Activity) context,myViewHolder.img,String.valueOf(items.get(i).getComicId()),items.get(i).getCover());
             }
         });
     }

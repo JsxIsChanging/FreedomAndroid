@@ -26,6 +26,7 @@ import java.util.ArrayList;
  */
 
 public class ComicListFragment extends Fragment implements BaseView,OnChannelSelectedListener{
+    private final String TAG = "ComicListFragment";
 
     private AutoChannelView mChannelView;
     private ComicListPresenter mComicListPresenter;
@@ -75,6 +76,7 @@ public class ComicListFragment extends Fragment implements BaseView,OnChannelSel
 
     @Override
     public void loadComplete(Object object) {
+        Log.e(TAG,"loadcomplete");
         if(object instanceof ComicListBean){
             mComitList = (ComicListBean)object;
             mRankList = mComitList.getData().getReturnData().getRankinglist();
@@ -128,7 +130,7 @@ public class ComicListFragment extends Fragment implements BaseView,OnChannelSel
 
     @Override
     public void loadFail() {
-
+        Log.e(TAG,"loadfail");
     }
 
     @Override
