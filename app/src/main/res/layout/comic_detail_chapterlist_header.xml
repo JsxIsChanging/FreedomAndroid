@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingTop="6dp"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingBottom="6dp"
+    android:layout_height="40dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textColor="#999999"
+        android:textSize="12sp" />
+
+    <CheckBox
+        android:id="@+id/sort"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:text="@string/comic_detail_header_sort"
+        android:drawablePadding="2dp"
+        android:button="@null"
+        android:checked="true"
+        android:drawableRight="@drawable/comic_detail_sort_background" />
+
+</RelativeLayout>

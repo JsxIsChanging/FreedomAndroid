@@ -5,4 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="tabSelected">#1296db</color>
     <color name="tabNormal">#2e2e2e</color>
+    <color name="rank_list_title_color">#4f4f4f</color>
+    <color name="rank_list_description_color">#8f8f8f</color>
+    <color name="transparent">#00000000</color>
+    <color name="comic_detail_title">#ffffff</color>
 </resources>

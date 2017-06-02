@@ -28,4 +28,8 @@ public interface RetrofitApi {
     Call<ComicListBean> getComicDetailCall(
             @Query("comicid")String comicid
     );
+    @GET("comic/detail_static_new")
+    Observable<ComicListBean> getComicDetailObservable(
+            @Query("comicid")String comicid
+    );
 }

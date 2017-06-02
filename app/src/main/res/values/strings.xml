@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="comic_detail_header">更新到</string>
+    <string name="comic_detail_header_sort">正序</string>
+    <string name="comic_detail_header_reverse">倒序</string>
 </resources>

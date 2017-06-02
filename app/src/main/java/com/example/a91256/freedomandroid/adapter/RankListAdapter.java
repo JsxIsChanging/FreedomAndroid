@@ -49,7 +49,7 @@ public class RankListAdapter extends RecyclerView.Adapter<RankListHolder>{
         }
         str +=  tags.get(tags.size()-1);
         myViewHolder.type.setText(str);
-        myViewHolder.des.setText("  " + items.get(i).getDescription());
+        myViewHolder.des.setText(items.get(i).getDescription());
         myViewHolder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
