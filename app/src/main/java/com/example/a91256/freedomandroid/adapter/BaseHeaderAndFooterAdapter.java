@@ -1,41 +1,132 @@
 package com.example.a91256.freedomandroid.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.a91256.freedomandroid.bean.ChapterBean;
+import com.example.a91256.freedomandroid.holder.ComicDetailLIstHolder;
+
+import java.util.ArrayList;
 
 /**
  * Created by 91256 on 2017/5/31.
  */
 
-public abstract class BaseHeaderAndFooterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public abstract class BaseHeaderAndFooterAdapter<T extends RecyclerView.ViewHolder,D> extends RecyclerView.Adapter<T> {
 
-    protected View headerView;
-    protected View footerView;
+    private final int TYPE_NORMAL = -1;
+    private final int TYPE_HEADER_OR_FOOTER_BASE = 10000;
 
-    protected final int TYPE_NORMAL = 0;
-    protected final int TYPE_HEADER = 1;
-    protected final int TYPE_FOOTER = 2;
+    private ArrayList<View> headerViews = new ArrayList<>();
+    private ArrayList<View> footerViews = new ArrayList<>();
+
+    private ArrayList<D> data;
+    private Context context;
+
+    public BaseHeaderAndFooterAdapter( Context context) {
+        this.context = context;
+    }
+
+    public void setData(ArrayList<D> list) {
+        this.data = list;
+    }
+
+    protected ArrayList<D> getData(){
+        return data;
+    }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public T onCreateViewHolder(ViewGroup viewGroup, int i) {
+        if (isHeader(i)) {
+            return creatHeaderOrFooterHolder(headerViews.get(i));
+        }
+        if (isFooter(i)) {
+            return creatHeaderOrFooterHolder(footerViews.get(i - TYPE_HEADER_OR_FOOTER_BASE));
+        }
         return creatViewHolder(viewGroup,i);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        renderItemView(viewHolder,i);
+    public void onBindViewHolder(T viewHolder, int i) {
+        if (i < headerViews.size() || i >= getItemCount() - footerViews.size()) {
+            return;
+        }
+        if (data != null && !data.isEmpty()) {
+            i -= headerViews.size();
+            renderItemView(viewHolder, i);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return getTotalCount();
+        int count = data != null ? data.size() : 0;
+        return count + headerViews.size() + footerViews.size();
     }
 
-    protected abstract int getTotalCount();
+    @Override
+    public int getItemViewType(int position) {
+        if (position < headerViews.size()) {
+//            return (int) headerViews.get(position).getTag();
+            return position;
+        }
+        int footerPosition = position - (getItemCount() - footerViews.size());
+        if (footerPosition >= 0) {
+//            return (int) footerViews.get(footerPosition).getTag();
+            return footerPosition + TYPE_HEADER_OR_FOOTER_BASE;
+        }
+        return TYPE_NORMAL;
+    }
 
-    protected abstract void renderItemView(RecyclerView.ViewHolder viewHolder, int i);
+    public void addHeaderView(View view) {
+//        view.setTag(headerViews.size());
+        headerViews.add(0,view);
+        notifyDataSetChanged();
+    }
 
-    protected abstract RecyclerView.ViewHolder creatViewHolder(ViewGroup viewGroup, int i);
+    public void addFooterView(View view) {
+//        view.setTag(TYPE_HEADER_OR_FOOTER_BASE + footerViews.size());
+        footerViews.add(view);
+        notifyDataSetChanged();
+    }
+
+    public boolean removeHeader(View view){
+        boolean b =  headerViews.remove(view);
+        notifyDataSetChanged();
+        return b;
+    }
+
+    public boolean removeFooter(View view){
+        boolean b = footerViews.remove(view);
+        notifyDataSetChanged();
+        return b;
+    }
+
+    private boolean isHeader(int type) {
+        boolean isHeader = false;
+        if (type < TYPE_HEADER_OR_FOOTER_BASE && type > TYPE_NORMAL) {
+            isHeader = true;
+        }
+        return isHeader;
+    }
+
+    private boolean isFooter(int type) {
+        boolean isFooter = false;
+        if (type >= TYPE_HEADER_OR_FOOTER_BASE) {
+            isFooter = true;
+        }
+        return isFooter;
+    }
+
+    protected Context getContext(){
+        return context;
+    }
+
+    abstract void renderItemView(T viewHolder, int i);
+
+    abstract T creatViewHolder(ViewGroup viewGroup,int i);
+
+    abstract T creatHeaderOrFooterHolder(View view);
 
 }

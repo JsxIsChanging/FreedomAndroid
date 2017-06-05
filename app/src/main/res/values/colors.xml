@@ -9,4 +9,5 @@
     <color name="rank_list_description_color">#8f8f8f</color>
     <color name="transparent">#00000000</color>
     <color name="comic_detail_title">#ffffff</color>
+    <color name="background_color">#e5e5e5</color>
 </resources>

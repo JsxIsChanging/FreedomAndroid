@@ -10,6 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.example.a91256.freedomandroid.R;
@@ -31,11 +34,12 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
     public static final String TYPE_DOWN = "down";
     private final String TAG = "ComicRankDetailFragment";
 
-    private int cuurrentPage = 1;
+    private int currentPage = 1;
     private boolean isloading = false;
     private String argName;
     private String argValue;
     private String loadType;
+    private boolean loadMore = true;
 
 
     private RankinglistBean mRankBean;
@@ -44,6 +48,7 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
     private PullRefreshLayout pullRefreshLayout;
     private RankListAdapter adapter;
     private ArrayList<RankDetailBean> listBean = new ArrayList<>();
+    private View nothingMore ;
 
 
     public static Fragment getInstance(RankinglistBean bean){
@@ -66,7 +71,7 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate( R.layout.comic_rank_detail,container,false);
+        View view = inflater.inflate( R.layout.comic_rank_detail,null,false);
         mRecyclerView = (RecyclerView)view.findViewById(R.id.list);
         pullRefreshLayout = (PullRefreshLayout)view.findViewById(R.id.pullrefresh_layout);
         pullRefreshLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
@@ -74,6 +79,16 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
             public void onRefresh() {
                 loadType = TYPE_DOWN;
                 mPresenter.loadData(1,argName,argValue);
+            }
+        });
+        nothingMore = inflater.inflate(R.layout.ranklist_nothing_more,null,false);
+        nothingMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.removeFooter(nothingMore);
+                currentPage++;
+                loadType = TYPE_UP;
+                mPresenter.loadData(currentPage,argName,argValue);
             }
         });
         initList();
@@ -99,13 +114,11 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
                 int visibleCount = recyclerView.getChildCount();
                 int firstPosition = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
-                if(!isloading && totalCount - firstPosition - visibleCount <= 2){
-                    cuurrentPage ++;
+                if(!isloading && totalCount - firstPosition - visibleCount <= 2 && loadMore){
+                    currentPage++;
                     loadType = TYPE_UP;
-                    mPresenter.loadData(cuurrentPage,argName,argValue);
+                    mPresenter.loadData(currentPage,argName,argValue);
                     isloading = true;
-                }else if(isloading){
-                    isloading = false;
                 }
             }
         });
@@ -126,6 +139,17 @@ public class ComicRankDetailFragment extends Fragment implements BaseView{
                     listBean.addAll(bean.getData().getReturnData().getComics());
                     adapter.setData(listBean);
                     adapter.notifyDataSetChanged();
+                    isloading = false;
+                }
+                adapter.removeFooter(nothingMore);
+                loadMore = true;
+            }else{
+                if(TYPE_DOWN.equals(loadType)){
+                    Toast.makeText(getActivity(),"没有新数据",Toast.LENGTH_SHORT).show();
+                }else if(TYPE_UP.equals(loadType)){
+                    adapter.addFooterView(nothingMore);
+                    loadMore = false;
+                    isloading = false;
                 }
             }
         }

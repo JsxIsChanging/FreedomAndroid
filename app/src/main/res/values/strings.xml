@@ -6,4 +6,6 @@
     <string name="comic_detail_header">更新到</string>
     <string name="comic_detail_header_sort">正序</string>
     <string name="comic_detail_header_reverse">倒序</string>
+    <string name="nothing_more">已显示全部</string>
+    <string name="show_loadIng">正在加载</string>
 </resources>

@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -59,6 +60,10 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
     private RelativeLayout mDetailTop;
     private TouchEventRelativeLayout mLayout;
     private RelativeLayout mHeadLayout;
+    private ImageView back;
+    private ImageView collect;
+    private ImageView share;
+    private View headerView;
 
     //文章ID，
     private String mComicId;
@@ -72,6 +77,10 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
     private ArrayList<ChapterBean> mChapterList;
 
     private int eventY;
+
+    private float translateHeight;
+
+    private boolean isLoadSuccess = false;
 
 
     @Override
@@ -94,7 +103,12 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
         mDetailTop = (RelativeLayout) findViewById(R.id.detail_top);
         mHeadLayout = (RelativeLayout) findViewById(R.id.head_layout);
         mLayout = (TouchEventRelativeLayout) findViewById(R.id.activity_comic_detail);
-        mLayout.setOnComicDetailTouchListener(this);
+
+        back = (ImageView) findViewById(R.id.back);
+        collect = (ImageView) findViewById(R.id.collect);
+        share = (ImageView) findViewById(R.id.share);
+
+        initListener();
         initBackGroundImg();
         initRecyclerView();
         ImageDownloader.startDownload(url, this, new BaseBitmapDataSubscriber() {
@@ -116,6 +130,12 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
         ViewCompat.setTransitionName(headImg, "image");
     }
 
+    private void initListener() {
+
+        back.setOnClickListener(this);
+        mLayout.setOnComicDetailTouchListener(this);
+    }
+
     private void initRecyclerView() {
         presenter = new ComitDetailPresenter(this);
         presenter.loadData(mComicId);
@@ -124,11 +144,6 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
         mRecyclerView.setLayoutManager(linearLayoutManager);
         adapter = new ComicDetailListAdapter(this);
         mRecyclerView.setAdapter(adapter);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRecyclerView.getLayoutParams();
-        if (params != null) {
-            params.height = getWindowManager().getDefaultDisplay().getHeight() - mDetailTop.getHeight();
-            mRecyclerView.setLayoutParams(params);
-        }
     }
 
     private void initBackGroundImg() {
@@ -169,10 +184,20 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 mReturnDataBean = comicListBean.getData().getReturnData();
                 mChapterList = mReturnDataBean.getChapter_list();
                 mComicDetailBean = mReturnDataBean.getComic();
-                adapter.addHeaderView(createHeadView(mChapterList));
+                adapter.addHeaderView(headerView = createHeadView(mChapterList));
                 Collections.reverse(mChapterList);
                 adapter.setData(mChapterList);
                 adapter.notifyDataSetChanged();
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mRecyclerView.getLayoutParams();
+                if (params != null) {
+//                    params.height = getWindowManager().getDefaultDisplay().getHeight() - mDetailTop.getHeight();
+                    params.topMargin = (int)mHeadLayout.getY()+mHeadLayout.getHeight();
+                    params.bottomMargin = - mHeadLayout.getHeight();
+                    mRecyclerView.setLayoutParams(params);
+                }
+                mRecyclerView.setVisibility(View.VISIBLE);
+                translateHeight = mHeadLayout.getHeight();
 
                 mDetailTitle.setText(mComicDetailBean.getName());
                 mHeaderTitle.setText(mComicDetailBean.getName());
@@ -185,6 +210,8 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 mDetailDes.setText(mComicDetailBean.getDescription());
 
                 mDetailAuthor.setText(mComicDetailBean.getAuthor().getName());
+
+                isLoadSuccess = true;
             }
         }
     }
@@ -192,6 +219,7 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
     @Override
     public void loadFail() {
         Log.e(TAG, "loadFail");
+        isLoadSuccess = false;
     }
 
     @Override
@@ -240,14 +268,23 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
     public boolean onInterceptTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (event.getY() < mRecyclerView.getY()) {
-                    return false;
-                }
                 eventY = (int) event.getY();
-                if (mHeadLayout.getY() >= mDetailTop.getY() + mDetailTop.getHeight()) {
-                    return true;
-                }
                 break;
+            case MotionEvent.ACTION_MOVE:
+                boolean isUsed = false;
+                int y = (int) event.getY();
+                float mDetailTopBottom = mDetailTop.getY() + mDetailTop.getHeight();
+                if (y - eventY >= 0) {
+                    if (mRecyclerView.getY() >= mDetailTopBottom && mRecyclerView.getLayoutManager().getChildAt(0).getTop() == 0) {
+                        isUsed = true;
+                    }
+                } else {
+                    if (mRecyclerView.getY() > mDetailTopBottom) {
+                        isUsed = true;
+                    }
+                }
+                eventY = y;
+                return isUsed && isLoadSuccess;
         }
         return false;
     }
@@ -256,9 +293,11 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                eventY = (int) event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
                 int y = (int) event.getY();
+                Log.e(TAG, "move y = " + y);
                 if (y - eventY >= 0) {
                     moveDown(y - eventY);
                 } else {
@@ -270,16 +309,63 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 eventY = -1;
                 break;
         }
-        return false;
+        return true;
     }
 
     private void moveUp(int length) {
-        int y = (int) mRecyclerView.getY();
-
+        float mHeadLayoutTrans = ViewCompat.getTranslationY(mHeadLayout);
+        float mRecyclerTrans = ViewCompat.getTranslationY(mRecyclerView);
+        float detailBottom = mDetailTop.getY() + mDetailTop.getHeight();
+        Log.e(TAG, "detailBottom = " + detailBottom);
+        Log.e(TAG, "moveup length = " + length);
+        float listY = mRecyclerView.getY();
+        Log.e(TAG, "listy =" + listY);
+        if (listY - length >= detailBottom) {
+            float alpha = 1 - Math.abs(mRecyclerTrans - length) / translateHeight;
+            showMoveAnimator(mHeadLayout, mHeadLayoutTrans-length, alpha, 0);
+            showMoveAnimator(mRecyclerView, mRecyclerTrans-length, 1, 0);
+            if(alpha <= 0.5){
+                mHeaderTitle.setVisibility(View.VISIBLE);
+                showMoveAnimator(mHeaderTitle,0,1 - alpha*2,0);
+            }else{
+                mHeaderTitle.setVisibility(View.INVISIBLE);
+            }
+        } else if (listY > detailBottom) {
+            float translationy = mRecyclerView.getY() - mDetailTop.getY() - mDetailTop.getHeight();
+            showMoveAnimator(mHeadLayout, mHeadLayoutTrans-translationy, 0, 0);
+            showMoveAnimator(mRecyclerView, mRecyclerTrans-translationy, 1, 0);
+        }
     }
 
     private void moveDown(int length) {
+        float mHeadLayoutTrans = ViewCompat.getTranslationY(mHeadLayout);
+        float mRecyclerTrans = ViewCompat.getTranslationY(mRecyclerView);
+        float headLayoutTop = mHeadLayout.getY();
+        float detailBottom = mDetailTop.getY() + mDetailTop.getHeight();
+        if (headLayoutTop + length <= detailBottom) {
+            float alpha = 1 - Math.abs(mRecyclerTrans - length) / translateHeight;
+            showMoveAnimator(mHeadLayout, mHeadLayoutTrans + length, alpha, 0);
+            showMoveAnimator(mRecyclerView,mRecyclerTrans + length, 1, 0);
+            if(alpha <= 0.5){
+                mHeaderTitle.setVisibility(View.VISIBLE);
+                showMoveAnimator(mHeaderTitle,0,1 - alpha*2,0);
+            }else{
+                mHeaderTitle.setVisibility(View.INVISIBLE);
+            }
+        } else if (headLayoutTop < detailBottom) {
+            float translationy = mDetailTop.getY() + mDetailTop.getHeight() - mHeadLayout.getY();
+            showMoveAnimator(mHeadLayout, mHeadLayoutTrans + translationy, 1, 0);
+            showMoveAnimator(mRecyclerView,mRecyclerTrans + translationy, 1, 0);
+        }
+    }
 
+    private void showMoveAnimator(View view, float translationy, float alpha, long duration) {
+        if(alpha <= 0.1)alpha = 0;
+        ViewCompat.animate(view)
+                .translationY(translationy)
+                .alpha(alpha)
+                .setDuration(duration)
+                .start();
     }
 
     @Override
