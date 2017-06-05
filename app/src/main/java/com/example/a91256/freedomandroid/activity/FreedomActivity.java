@@ -66,13 +66,13 @@ public class FreedomActivity extends AppCompatActivity implements RadioGroup.OnC
                 }
                 mTransaction.show(mComicListFragment);
                 break;
-            case R.id.library_text:
+           /* case R.id.library_text:
                 mTransaction.hide(mComicListFragment);
                 break;
             case R.id.featured_text:
                 break;
             case R.id.find_text:
-                break;
+                break;*/
         }
         mTransaction.commit();
     }
