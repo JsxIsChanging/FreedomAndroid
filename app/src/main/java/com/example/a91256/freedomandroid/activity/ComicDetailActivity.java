@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
