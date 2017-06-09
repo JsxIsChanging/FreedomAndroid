@@ -1,7 +1,6 @@
 package com.example.a91256.freedomandroid.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import com.example.a91256.freedomandroid.R;
 import com.example.a91256.freedomandroid.bean.ChapterBean;
 import com.example.a91256.freedomandroid.holder.ComicDetailLIstHolder;
 
-import java.util.ArrayList;
 
 /**
  * Created by 91256 on 2017/5/31.
@@ -21,6 +19,11 @@ public class ComicDetailListAdapter extends BaseHeaderAndFooterAdapter<ComicDeta
 
     public ComicDetailListAdapter(Context context) {
         super(context);
+    }
+
+    @Override
+    int getItemType(int position) {
+        return TYPE_NORMAL;
     }
 
     @Override

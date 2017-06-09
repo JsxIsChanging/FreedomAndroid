@@ -6,4 +6,5 @@ package com.example.a91256.freedomandroid.utils;
 
 public class Urls {
     public static String MAIN_URL = "http://app.u17.com/v3/appV3/android/phone/";
+    public static String MAIN_URL_NEW = "http://app.u17.com/v3/appV3_2/android/phone/";
 }

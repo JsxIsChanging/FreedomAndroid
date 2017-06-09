@@ -14,6 +14,10 @@ public class ReturnDataBean {
     private boolean hasMore;
     private int page;
     private ComicDetailBean comic;
+    private String chapter_id;
+    private String type;
+    private String zip_file_high;
+    private ArrayList<ComicImage> image_list;
 
     public ArrayList<RankinglistBean> getRankinglist() {
         return rankinglist;
@@ -69,5 +73,37 @@ public class ReturnDataBean {
 
     public void setOtherWorks(ArrayList<OtherWorkBean> otherWorks) {
         this.otherWorks = otherWorks;
+    }
+
+    public String getChapter_id() {
+        return chapter_id;
+    }
+
+    public void setChapter_id(String chapter_id) {
+        this.chapter_id = chapter_id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getZip_file_high() {
+        return zip_file_high;
+    }
+
+    public void setZip_file_high(String zip_file_high) {
+        this.zip_file_high = zip_file_high;
+    }
+
+    public ArrayList<ComicImage> getImage_list() {
+        return image_list;
+    }
+
+    public void setImage_list(ArrayList<ComicImage> image_list) {
+        this.image_list = image_list;
     }
 }

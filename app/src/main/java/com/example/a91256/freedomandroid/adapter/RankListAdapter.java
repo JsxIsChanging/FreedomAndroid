@@ -2,8 +2,6 @@ package com.example.a91256.freedomandroid.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +22,11 @@ public class RankListAdapter extends BaseHeaderAndFooterAdapter<RankListHolder,R
 
     public RankListAdapter(Context context) {
         super(context);
+    }
+
+    @Override
+    int getItemType(int position) {
+        return TYPE_NORMAL;
     }
 
     @Override

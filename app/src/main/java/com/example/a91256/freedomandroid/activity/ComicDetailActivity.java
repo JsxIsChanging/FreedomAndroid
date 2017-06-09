@@ -290,12 +290,13 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        int y;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 eventY = (int) event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
-                int y = (int) event.getY();
+                y = (int) event.getY();
                 Log.e(TAG, "move y = " + y);
                 if (y - eventY >= 0) {
                     moveDown(y - eventY);
@@ -305,6 +306,13 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 eventY = y;
                 break;
             case MotionEvent.ACTION_UP:
+                y = (int) event.getY();
+                Log.e(TAG, "move y = " + y);
+                if (y - eventY >= 0) {
+                    moveDown(y - eventY);
+                } else {
+                    moveUp(eventY - y);
+                }
                 eventY = -1;
                 break;
         }

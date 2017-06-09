@@ -5,9 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.a91256.freedomandroid.bean.ChapterBean;
-import com.example.a91256.freedomandroid.holder.ComicDetailLIstHolder;
-
 import java.util.ArrayList;
 
 /**
@@ -16,8 +13,9 @@ import java.util.ArrayList;
 
 public abstract class BaseHeaderAndFooterAdapter<T extends RecyclerView.ViewHolder,D> extends RecyclerView.Adapter<T> {
 
-    private final int TYPE_NORMAL = -1;
-    private final int TYPE_HEADER_OR_FOOTER_BASE = 10000;
+    protected final int TYPE_NORMAL = 0;
+    private final int TYPE_HEADER_BASE = 10000;
+    private final int TYPE_FOOTER_BASE = 20000;
 
     private ArrayList<View> headerViews = new ArrayList<>();
     private ArrayList<View> footerViews = new ArrayList<>();
@@ -40,10 +38,10 @@ public abstract class BaseHeaderAndFooterAdapter<T extends RecyclerView.ViewHold
     @Override
     public T onCreateViewHolder(ViewGroup viewGroup, int i) {
         if (isHeader(i)) {
-            return creatHeaderOrFooterHolder(headerViews.get(i));
+            return creatHeaderOrFooterHolder(headerViews.get(i - TYPE_HEADER_BASE));
         }
         if (isFooter(i)) {
-            return creatHeaderOrFooterHolder(footerViews.get(i - TYPE_HEADER_OR_FOOTER_BASE));
+            return creatHeaderOrFooterHolder(footerViews.get(i - TYPE_FOOTER_BASE));
         }
         return creatViewHolder(viewGroup,i);
     }
@@ -69,14 +67,14 @@ public abstract class BaseHeaderAndFooterAdapter<T extends RecyclerView.ViewHold
     public int getItemViewType(int position) {
         if (position < headerViews.size()) {
 //            return (int) headerViews.get(position).getTag();
-            return position;
+            return position + TYPE_HEADER_BASE;
         }
         int footerPosition = position - (getItemCount() - footerViews.size());
         if (footerPosition >= 0) {
 //            return (int) footerViews.get(footerPosition).getTag();
-            return footerPosition + TYPE_HEADER_OR_FOOTER_BASE;
+            return footerPosition + TYPE_FOOTER_BASE;
         }
-        return TYPE_NORMAL;
+        return getItemType(position - headerViews.size());
     }
 
     public void addHeaderView(View view) {
@@ -103,9 +101,19 @@ public abstract class BaseHeaderAndFooterAdapter<T extends RecyclerView.ViewHold
         return b;
     }
 
+    public void removeAllHeaders(){
+        headerViews = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
+    public void removeAllFooters(){
+        footerViews = new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
     private boolean isHeader(int type) {
         boolean isHeader = false;
-        if (type < TYPE_HEADER_OR_FOOTER_BASE && type > TYPE_NORMAL) {
+        if (type < TYPE_FOOTER_BASE && type >= TYPE_HEADER_BASE) {
             isHeader = true;
         }
         return isHeader;
@@ -113,7 +121,7 @@ public abstract class BaseHeaderAndFooterAdapter<T extends RecyclerView.ViewHold
 
     private boolean isFooter(int type) {
         boolean isFooter = false;
-        if (type >= TYPE_HEADER_OR_FOOTER_BASE) {
+        if (type >= TYPE_FOOTER_BASE) {
             isFooter = true;
         }
         return isFooter;
@@ -122,6 +130,8 @@ public abstract class BaseHeaderAndFooterAdapter<T extends RecyclerView.ViewHold
     protected Context getContext(){
         return context;
     }
+
+    abstract int getItemType(int position);
 
     abstract void renderItemView(T viewHolder, int i);
 

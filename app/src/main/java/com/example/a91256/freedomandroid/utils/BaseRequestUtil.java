@@ -13,6 +13,9 @@ public class BaseRequestUtil {
     public static <T> T createApi(Class<T> clazz){
         return createApi(clazz,Urls.MAIN_URL);
     }
+    public static <T> T createApiNew(Class<T> clazz){
+        return createApi(clazz,Urls.MAIN_URL_NEW);
+    }
 
     public static <T> T createApi(Class<T> clazz,String url){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(url)
