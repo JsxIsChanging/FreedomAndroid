@@ -11,6 +11,9 @@ import android.widget.RadioGroup;
 
 import com.example.a91256.freedomandroid.R;
 import com.example.a91256.freedomandroid.fragment.ComicListFragment;
+import com.example.a91256.freedomandroid.fragment.FeaturedFragment;
+
+import java.util.ArrayList;
 
 public class FreedomActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener{
 
@@ -21,8 +24,10 @@ public class FreedomActivity extends AppCompatActivity implements RadioGroup.OnC
     private RadioGroup bottomBar;
     private FragmentManager mFragmentManager;
     private ComicListFragment mComicListFragment;
+    private FeaturedFragment mFeaturedFragment;
     private FragmentTransaction mTransaction;
     private Fragment mCurrentFragment;
+    private ArrayList<Fragment> mFragments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +49,11 @@ public class FreedomActivity extends AppCompatActivity implements RadioGroup.OnC
         mFragmentManager = getSupportFragmentManager();
         mTransaction = mFragmentManager.beginTransaction();
         mComicListFragment = new ComicListFragment();
-        mCurrentFragment = mComicListFragment;
-        mTransaction.add(R.id.content,mComicListFragment);
-        mTransaction.commit();
+        mFragments.add(mComicListFragment);
+        mFeaturedFragment = new FeaturedFragment();
+        mFragments.add(mFeaturedFragment);
+        addAllFragment(mTransaction);
+        showFragment(mTransaction , mComicListFragment);
     }
 
     @Override
@@ -56,24 +63,35 @@ public class FreedomActivity extends AppCompatActivity implements RadioGroup.OnC
     private void changeFragment(int id){
         if(mFragmentManager == null)
             mFragmentManager = getSupportFragmentManager();
-        if(mTransaction == null)
-            mTransaction = mFragmentManager.beginTransaction();
+        mTransaction = mFragmentManager.beginTransaction();
         switch (id){
             case R.id.bookcase_text:
-                if(mComicListFragment == null){
-                    mComicListFragment = new ComicListFragment();
-                    mTransaction.add(R.id.content,mComicListFragment);
-                }
-                mTransaction.show(mComicListFragment);
-                break;
-           /* case R.id.library_text:
-                mTransaction.hide(mComicListFragment);
+                showFragment(mTransaction,mComicListFragment);
                 break;
             case R.id.featured_text:
+                showFragment(mTransaction,mFeaturedFragment);
+                break;
+
+           /* case R.id.library_text:
+                mTransaction.hide(mComicListFragment);
                 break;
             case R.id.find_text:
                 break;*/
         }
-        mTransaction.commit();
     }
+    private void addAllFragment(FragmentTransaction transaction){
+        for (Fragment fragment : mFragments){
+            transaction.add(R.id.content,fragment);
+        }
+    }
+
+    private void showFragment(FragmentTransaction transaction,Fragment fragment){
+        for(Fragment fragment1 : mFragments){
+            transaction.hide(fragment1);
+        }
+        transaction.show(fragment);
+        mCurrentFragment = fragment;
+        transaction.commit();
+    }
+
 }

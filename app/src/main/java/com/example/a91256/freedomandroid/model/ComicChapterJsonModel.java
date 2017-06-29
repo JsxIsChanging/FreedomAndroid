@@ -34,7 +34,6 @@ public class ComicChapterJsonModel implements BaseModel {
                 .subscribe(new Observer<ComicListBean>() {
                     @Override
                     public void onCompleted() {
-                        callBack.success(null);
                     }
 
                     @Override

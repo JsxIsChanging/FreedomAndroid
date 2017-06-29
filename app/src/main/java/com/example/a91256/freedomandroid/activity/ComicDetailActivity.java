@@ -116,7 +116,7 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 runOnUiThread(new Thread() {
                     @Override
                     public void run() {
-                        headImg.setImageBitmap(bitmap);
+                        headImg.setImageBitmap(bitmap.copy(bitmap.getConfig(),bitmap.isMutable()));
                     }
                 });
             }
@@ -153,7 +153,7 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 runOnUiThread(new Thread() {
                     @Override
                     public void run() {
-                        Blurry.with(ComicDetailActivity.this).from(bitmap).into(backgroundImg);
+                        Blurry.with(ComicDetailActivity.this).from(bitmap.copy(bitmap.getConfig(),bitmap.isMutable())).into(backgroundImg);
                     }
                 });
             }

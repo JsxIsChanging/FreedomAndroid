@@ -21,7 +21,7 @@ public abstract class BaseHeaderAndFooterAdapter<T extends RecyclerView.ViewHold
     private ArrayList<View> footerViews = new ArrayList<>();
 
     private ArrayList<D> data;
-    private Context context;
+    protected Context context;
 
     public BaseHeaderAndFooterAdapter( Context context) {
         this.context = context;

@@ -1,11 +1,13 @@
 package com.example.a91256.freedomandroid.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.a91256.freedomandroid.R;
+import com.example.a91256.freedomandroid.activity.ComicChapterActivity;
 import com.example.a91256.freedomandroid.bean.ChapterBean;
 import com.example.a91256.freedomandroid.holder.ComicDetailLIstHolder;
 
@@ -29,6 +31,15 @@ public class ComicDetailListAdapter extends BaseHeaderAndFooterAdapter<ComicDeta
     @Override
     void renderItemView(ComicDetailLIstHolder viewHolder, int i) {
         ChapterBean bean = getData().get(i);
+        final String chapterId = bean.getChapter_id();
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,ComicChapterActivity.class);
+                intent.putExtra("chapterId",chapterId);
+                context.startActivity(intent);
+            }
+        });
         renderIsNew(bean.getIs_new(), viewHolder.isNew);
         viewHolder.title.setText(bean.getName());
         renderIsLocked(bean.isHas_locked_image(), viewHolder.lock);

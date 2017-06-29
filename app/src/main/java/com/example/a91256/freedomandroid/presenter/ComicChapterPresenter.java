@@ -11,7 +11,7 @@ import com.example.a91256.freedomandroid.model.ComicChapterJsonModel;
  */
 
 public class ComicChapterPresenter extends BasePresenter<BaseModel,BaseView> {
-    public ComicChapterPresenter() {
+    public ComicChapterPresenter(BaseView baseView) {
         ComicChapterJsonModel model = new ComicChapterJsonModel(new BaseJsonCallBack() {
             @Override
             public void success(Object object) {
@@ -25,7 +25,7 @@ public class ComicChapterPresenter extends BasePresenter<BaseModel,BaseView> {
                 view.stopLoading();
             }
         });
-        attach(model,view);
+        attach(model,baseView);
     }
 
     public void loadData(String chapterId){
