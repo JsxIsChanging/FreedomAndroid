@@ -3,6 +3,7 @@ package com.example.a91256.freedomandroid.Views;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
  */
 
 public class AutoChannelView extends RelativeLayout{
+
+    private final String TAG = "AutoChannelView";
 
     private ArrayList<RankinglistBean> items;
     private View mContainer;

@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 
 public class TouchEventRelativeLayout extends RelativeLayout {
 
+    private final String TAG = "TouchEventRelativeLayout";
+
     public TouchEventRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -50,4 +52,5 @@ public class TouchEventRelativeLayout extends RelativeLayout {
 
         boolean onTouchEvent(MotionEvent event);
     }
+
 }

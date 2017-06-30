@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.a91256.freedomandroid.R;
 import com.example.a91256.freedomandroid.activity.ComicChapterActivity;
@@ -32,17 +33,27 @@ public class ComicDetailListAdapter extends BaseHeaderAndFooterAdapter<ComicDeta
     void renderItemView(ComicDetailLIstHolder viewHolder, int i) {
         ChapterBean bean = getData().get(i);
         final String chapterId = bean.getChapter_id();
-        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,ComicChapterActivity.class);
-                intent.putExtra("chapterId",chapterId);
-                context.startActivity(intent);
-            }
-        });
+        final int type = bean.getType();
+        if(type == 0) {
+            viewHolder.layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ComicChapterActivity.class);
+                    intent.putExtra("chapterId", chapterId);
+                    context.startActivity(intent);
+                }
+            });
+        }else if(type == 3){
+            viewHolder.layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context,"当前章节为Vip，请先登录",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
         renderIsNew(bean.getIs_new(), viewHolder.isNew);
         viewHolder.title.setText(bean.getName());
-        renderIsLocked(bean.isHas_locked_image(), viewHolder.lock);
+        renderIsLocked(bean.getType(), viewHolder.lock);
     }
 
 
@@ -66,8 +77,8 @@ public class ComicDetailListAdapter extends BaseHeaderAndFooterAdapter<ComicDeta
         }
     }
 
-    private void renderIsLocked(boolean isLocked, View view) {
-        if (isLocked) {
+    private void renderIsLocked(int type ,View view) {
+        if (type == 3) {
             view.setVisibility(View.VISIBLE);
         } else {
             view.setVisibility(View.GONE);

@@ -297,7 +297,7 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 break;
             case MotionEvent.ACTION_MOVE:
                 y = (int) event.getY();
-                Log.e(TAG, "move y = " + y);
+//                Log.e(TAG, "move y = " + y);
                 if (y - eventY >= 0) {
                     moveDown(y - eventY);
                 } else {
@@ -307,7 +307,7 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 break;
             case MotionEvent.ACTION_UP:
                 y = (int) event.getY();
-                Log.e(TAG, "move y = " + y);
+//                Log.e(TAG, "move y = " + y);
                 if (y - eventY >= 0) {
                     moveDown(y - eventY);
                 } else {
@@ -323,10 +323,10 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
         float mHeadLayoutTrans = ViewCompat.getTranslationY(mHeadLayout);
         float mRecyclerTrans = ViewCompat.getTranslationY(mRecyclerView);
         float detailBottom = mDetailTop.getY() + mDetailTop.getHeight();
-        Log.e(TAG, "detailBottom = " + detailBottom);
-        Log.e(TAG, "moveup length = " + length);
+//        Log.e(TAG, "detailBottom = " + detailBottom);
+//        Log.e(TAG, "moveup length = " + length);
         float listY = mRecyclerView.getY();
-        Log.e(TAG, "listy =" + listY);
+//        Log.e(TAG, "listy =" + listY);
         if (listY - length >= detailBottom) {
             float alpha = 1 - Math.abs(mRecyclerTrans - length) / translateHeight;
             showMoveAnimator(mHeadLayout, mHeadLayoutTrans-length, alpha, 0);
