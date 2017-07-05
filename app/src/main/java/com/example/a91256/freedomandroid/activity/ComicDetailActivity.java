@@ -272,6 +272,9 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
             case MotionEvent.ACTION_MOVE:
                 boolean isUsed = false;
                 int y = (int) event.getY();
+                if(Math.abs(y-eventY) <= 2){
+                    return false;
+                }
                 float mDetailTopBottom = mDetailTop.getY() + mDetailTop.getHeight();
                 if (y - eventY >= 0) {
                     if (mRecyclerView.getY() >= mDetailTopBottom && mRecyclerView.getLayoutManager().getChildAt(0).getTop() == 0) {
@@ -294,10 +297,10 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 eventY = (int) event.getY();
-                break;
+                return false;
             case MotionEvent.ACTION_MOVE:
                 y = (int) event.getY();
-//                Log.e(TAG, "move y = " + y);
+                Log.e(TAG, "move y = " + y);
                 if (y - eventY >= 0) {
                     moveDown(y - eventY);
                 } else {
@@ -307,7 +310,7 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 break;
             case MotionEvent.ACTION_UP:
                 y = (int) event.getY();
-//                Log.e(TAG, "move y = " + y);
+                Log.e(TAG, "move y = " + y);
                 if (y - eventY >= 0) {
                     moveDown(y - eventY);
                 } else {
