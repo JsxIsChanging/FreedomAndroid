@@ -1,10 +1,18 @@
 package com.example.a91256.freedomandroid.activity;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Binder;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
@@ -19,6 +27,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.example.a91256.freedomandroid.R;
 import com.example.a91256.freedomandroid.Views.TouchEventRelativeLayout;
@@ -63,6 +72,7 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
     private ImageView collect;
     private ImageView share;
     private View headerView;
+    private ImageView freshBtn;
 
     //文章ID，
     private String mComicId;
@@ -107,6 +117,8 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
         collect = (ImageView) findViewById(R.id.collect);
         share = (ImageView) findViewById(R.id.share);
 
+        freshBtn = (ImageView)findViewById(R.id.fresh_btn);
+
         initListener();
         initBackGroundImg();
         initRecyclerView();
@@ -133,6 +145,7 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
 
         back.setOnClickListener(this);
         mLayout.setOnComicDetailTouchListener(this);
+        freshBtn.setOnClickListener(this);
     }
 
     private void initRecyclerView() {
@@ -183,6 +196,9 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
                 mReturnDataBean = comicListBean.getData().getReturnData();
                 mChapterList = mReturnDataBean.getChapter_list();
                 mComicDetailBean = mReturnDataBean.getComic();
+                if(headerView != null){
+                    adapter.removeHeader(headerView);
+                }
                 adapter.addHeaderView(headerView = createHeadView(mChapterList));
                 Collections.reverse(mChapterList);
                 adapter.setData(mChapterList);
@@ -370,12 +386,21 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
     }
 
     private void showMoveAnimator(View view, float translationy, float alpha, long duration) {
+        showMoveByobjectAnimator(view,translationy,alpha,duration);
+//        if(alpha <= 0.1)alpha = 0;
+//        ViewCompat.animate(view)
+//                .translationY(translationy)
+//                .alpha(alpha)
+//                .setDuration(duration)
+//                .start();
+    }
+
+    private void showMoveByobjectAnimator(View view,float translationy,float alpha,long duration){
         if(alpha <= 0.1)alpha = 0;
-        ViewCompat.animate(view)
-                .translationY(translationy)
-                .alpha(alpha)
-                .setDuration(duration)
-                .start();
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(ObjectAnimator.ofFloat(view,"translationY",translationy),
+                ObjectAnimator.ofFloat(view,"alpha",alpha));
+        set.setDuration(duration).start();
     }
 
     @Override
@@ -384,6 +409,10 @@ public class ComicDetailActivity extends AppCompatActivity implements BaseView, 
             case R.id.back:
                 onBackPressed();
                 break;
+            case R.id.fresh_btn:
+                presenter.loadData(mComicId);
+                break;
         }
     }
+
 }

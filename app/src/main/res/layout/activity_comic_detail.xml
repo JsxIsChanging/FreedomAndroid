@@ -141,4 +141,14 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <ImageView
+        android:id="@+id/fresh_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="60dp"
+        android:src="@mipmap/fresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </com.example.a91256.freedomandroid.Views.TouchEventRelativeLayout>
